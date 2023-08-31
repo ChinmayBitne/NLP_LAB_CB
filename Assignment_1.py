@@ -11,3 +11,6 @@ about_doc = nlp(about_text)
 
 for token in about_doc:
     print (token, token.idx)
+
+print("-------------------------------------------")
+print([token for token in about_doc if not token.is_stop])
