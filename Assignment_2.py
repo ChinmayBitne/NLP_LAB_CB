@@ -1,4 +1,6 @@
 from gensim.utils import simple_preprocess
+from gensim.models.word2vec import Word2Vec
+from multiprocessing import cpu_count
 from gensim import corpora, models
 import numpy as np
 
@@ -17,7 +19,7 @@ g_bow =[g_dict.doc2bow(token, allow_update = True) for token in tokens]
 print("Bag of Words : ", g_bow)
 
 print("----------------------------------------------------------------------------")
-text1 = ["The food is excellent but the service can be better",
+text1 = ["The food is excellent but the service can be better", 
         "The food is always delicious and loved the service",
         "The food was mediocre and the service was terrible"]
 
@@ -33,6 +35,23 @@ g_tfidf = models.TfidfModel(g_bow, smartirs='ntc')
 print("TF-IDF Vector:")
 for item in g_tfidf[g_bow]:
     print([[g_dict[id], np.around(freq, decimals=2)] for id, freq in item])
+print("----------------------------------------------------------------------------")
+data = [
+    "this is a sentence",
+    "another example sentence",
+    "word embeddings are useful",
+    "word2vec is a popular model",
+]
+
+tokenized_data = [sentence.split() for sentence in data]
+
+w2v_model = Word2Vec(tokenized_data, min_count=0, workers=cpu_count())
+
+similar_words = w2v_model.wv.most_similar('word')
+
+for word, score in similar_words:
+    print(f"{word}: {score}")
+
 
 '''
 Output: 
@@ -52,4 +71,16 @@ TF-IDF Vector:
 [['food', 0.11], ['is', 0.26], ['service', 0.11], ['the', 0.21], ['always', 0.52], ['and', 0.26], ['delicious', 0.52], ['loved', 0.52]]
 [['food', 0.08], ['service', 0.08], ['the', 0.16], ['and', 0.2], ['mediocre', 0.39], ['terrible', 0.39], ['was', 0.78]]
 
+//Word2Vec
+----------------------------------------------------------------------------
+sentence: 0.21617141366004944
+embeddings: 0.044689226895570755
+example: 0.015025208704173565
+useful: 0.0019510718993842602
+is: -0.03284316137433052
+this: -0.04568909481167793
+another: -0.0742427185177803
+are: -0.09326908737421036
+a: -0.09575342386960983
+word2vec: -0.10513807833194733
 '''
