@@ -1,3 +1,11 @@
+'''
+Assignment No.02
+Name: Chinmay Bitne
+Roll No: 14
+Batch: B1
+Title: "Assignment to implement Bag of Words and TFIDF using Gensim library."
+'''
+
 from gensim.utils import simple_preprocess
 from gensim.models.word2vec import Word2Vec
 from multiprocessing import cpu_count
